@@ -1,0 +1,40 @@
+﻿@model Crud_Application.Models.CreateEditEntryViewModel
+
+<h2>Edit Entry</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.HiddenFor(model => model.Id)
+    @Html.HiddenFor(model => model.Account)
+    <div asp-validation-summary="All" class="text-danger"></div>
+
+    <div class="form-group">
+        @Html.LabelFor(m => m.Narration)
+        @Html.TextBoxFor(m => m.Narration, new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.Narration, "", new { @class = "text-danger" })
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(m => m.Currency)
+        @Html.DropDownListFor(m => m.Currency,new SelectList(Enum.GetValues(typeof(Currency))),"Select Currency",new { @class = "form-select" })
+        @Html.ValidationMessageFor(m => m.Currency, "", new { @class = "text-danger" })
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(m => m.Type)
+        @Html.DropDownListFor(m => m.Type,new SelectList(Enum.GetValues(typeof(TransactionType))),"Select Transaction Type",new { @class = "form-select" })
+        @Html.ValidationMessageFor(m => m.Type, "", new { @class = "text-danger" })
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(m => m.Amount)
+        @Html.TextBoxFor(m => m.Amount, new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.Amount, "", new { @class = "text-danger" })
+    </div>
+
+    <br/>
+    <div class="form-group">
+        @Html.ActionLink("Back to List", "Index","Entry", null, new { @class = "btn btn-secondary" })
+        <input type="submit" value="Save" class="btn btn-primary" />
+    </div>
+}

@@ -1,0 +1,128 @@
+﻿@model Crud_Application.Models.EntriesDashboardViewModel
+
+@{
+    ViewData["Title"] = "Entries";
+}
+
+
+<div class="d-flex justify-content-between">
+    <h2>Entries</h2>
+    <div>
+        @Html.ActionLink("Add new entry", "Create", "Entry", null, new { @class = "btn btn-primary" })
+    </div>
+</div>
+
+@if (Model.DashboardStatistics.SalaryBalance > 0 || Model.DashboardStatistics.CurrentBalance > 0 || Model.DashboardStatistics.SavingsBalance > 0)
+{
+
+    <div class="d-flex justify-content-center align-content-center" style="height:40vh; width:80vw">
+        <canvas id="entriesChart"></canvas>
+        <canvas id="entriesChart2"></canvas>
+    </div>
+}
+
+
+@if (Model.Entries.Count > 0)
+{
+    <br/>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Account</th>
+                <th>Narration</th>
+                <th>Currency</th>
+                <th>Balance</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var entry in Model.Entries)
+            {
+                <tr>
+                    <td>@entry.Account</td>
+                    <td>@entry.Narration</td>
+                    <td>@entry.Currency</td>
+                    <td>@entry.Balance</td>
+                    <td>
+                        @Html.ActionLink("Edit", "Edit", new { id = entry.Id }, new { @class = "btn btn-primary btn-sm" })
+                        @Html.ActionLink("Delete", "Delete", new { id = entry.Id }, new { @class = "btn btn-danger btn-sm" })
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>No entries found.</p>
+}
+
+
+<script>
+    // Retrieve the statistics from the model passed to the view
+    var savingBalance = @Model.DashboardStatistics.SavingsBalance;
+    var currentBalance = @Model.DashboardStatistics.CurrentBalance;
+    var salaryBalance = @Model.DashboardStatistics.SalaryBalance;
+    var totalCreditCount = @Model.DashboardStatistics.TotalCreditCount;
+    var totalDebitCount = @Model.DashboardStatistics.TotalDebitCount;
+
+    // Create a chart using Chart.js
+    var ctx = document.getElementById('entriesChart').getContext('2d');
+    var chart = new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+            labels: ['Savings Account Balance', 'Current Account Balance', 'Salary Account Balance'],
+            datasets: [{
+                label: 'Statistics',
+                data: [savingBalance, currentBalance, salaryBalance],
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.5)',
+                    'rgba(54, 162, 235, 0.5)',
+                    'rgba(255, 206, 86, 0.5)'
+                ],
+                borderColor: [
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)'
+                ],
+                borderWidth: 1
+            }]
+        },
+
+    });
+
+    // Create a chart using Chart.js
+    var ctx = document.getElementById('entriesChart2').getContext('2d');
+    var chart = new Chart(ctx, {
+        type: 'bar',
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        autoSkip: true,
+                        maxTicksLimit: 10
+                    },
+                },
+            }
+        },
+        
+        data: {
+            labels: ['Total Credits', 'Total Debits'],
+            datasets: [{
+                label: 'Statistics',
+                data: [ totalCreditCount, totalDebitCount],
+                backgroundColor: [
+                    'rgba(54, 162, 235, 0.5)',
+                    'rgba(255, 206, 86, 0.5)'
+                ],
+                borderColor: [
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)'
+                ],
+                borderWidth: 1
+            }]
+        },
+
+    });
+</script>

@@ -1,0 +1,42 @@
+﻿@model List<Crud_Application.Models.Audit>
+
+@{
+    ViewData["Title"] = "Audit";
+}
+
+<h2>Audit Entries</h2>
+
+@if (Model.Count > 0)
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Table</th>
+                <th>Account</th>
+                <th>Field</th>
+                <th>Old Value</th>
+                <th>New Value</th>
+                <th>CreatedAt</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var entry in Model)
+            {
+                <tr>
+                    <td>@entry.Table</td>
+                    <td>@entry.Account</td>
+                    <td>@entry.Field</td>
+                    <td>@entry.OldValue</td>
+                    <td>@entry.NewValue</td>
+                    <td>@entry.CreatedAt</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>No audit entries found.</p>
+}
+
+<a asp-action="Index" asp-controller="Entry" class="btn btn-secondary">Entries Dashboard</a>
