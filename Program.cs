@@ -33,7 +33,7 @@ builder.Services.AddAuthentication(options =>
     options.Cookie.HttpOnly = true;
     options.ExpireTimeSpan = TimeSpan.FromMinutes(60);
     options.LoginPath = "/User/Login"; // Specify the login page URL
-    options.AccessDeniedPath = "/Home/AccessDenied"; // Specify the access denied page URL
+    options.AccessDeniedPath = "/User/Login"; // Specify the access denied page URL
 });
 
 
